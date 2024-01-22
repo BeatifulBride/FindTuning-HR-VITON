@@ -1,0 +1,58 @@
+# cuda 버전을 11.2 으로 가정한다.
+# 윈도우 환경에서는 wsl Ubuntu-22.04 를 사용한다.
+# VITON-HD 프로젝트에서는 Python3.8 을 사용을 하고 있지만
+# tensorflow_gpu가 23-12-29 기준으로 3.7 까지만 지원하고 있으므로 상위 버전에서도 충돌나지 않는다는걸 가정한다.
+# pip 목록은 requirement.txt에 기재해뒀지만 만일을 대비해 설치 순서대로 기술한다.
+
+# 기본 업데이트
+sudo apt-get update
+
+# 가상환경 설정을 위한 아나콘다 설치
+mkdir anaconda_install && cd anaconda_install
+wget https://repo.anaconda.com/archive/Anaconda3-2023.09-0-Linux-x86_64.sh
+sh https://repo.anaconda.com/archive/Anaconda3-2023.09-0-Linux-x86_64.sh
+
+# 아나콘다 환경 변수 추가
+sudo vi ~/.bashrc
+export PATH=&HOME/anaconda3/bin:$PATH
+
+# 설치했으므로 삭제.
+cd ../
+sudo rm -rf anaconda_install
+
+# 콘다 가상환경을 만들고 활성화 시킨다.
+conda create -n HR Python=3.8
+conda activate HR
+
+# 개발 환경을 위한 파이썬 설정
+sudo apt install python3-dev python3-pip
+sudo apt install -y libgl1
+
+#pip install -U --user pip numpy wheel packaging requests opt_einsum
+#pip install -U --user keras_preprocessing --no-deps
+
+# TensorFlow를 위한 설치
+## 드라이버가 있는지 확인
+nvidia-smi
+### 없을 경우에 참조
+https://www.nvidia.com/Download/index.aspx
+
+# wsl2를 위한 cuda 지원
+sudo apt-key del 7fa2af80
+wget https://developer.download.nvidia.com/compute/cuda/12.3.1/local_installers/cuda_12.3.1_545.23.08_linux.run
+sudo sh cuda_12.3.1_545.23.08_linux.run --silent --toolkit
+rm cuda_12.3.1_545.23.08_linux.run
+
+#pip install --upgrade pip
+#pip install tensorflow[and-cuda]==2.9.3
+
+#pip install torch && pip install torchvision &&
+#pip install scipy && pip install scikit-image &&
+#pip install tqdm && pip install opencv-python &&
+#pip install torchgeometry
+
+
+#해당 셋팅으로 세팅시 수정 해야 할 부분이 존재함.
+#from utils import * 에서 사용되는 np.float 혹은 np.int 들이 버전 변경으로 인해 지원하지 않음.
+#변경사항 np.float -> np.float64 | np.int -> np.int64
+

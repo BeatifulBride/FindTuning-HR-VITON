@@ -7,13 +7,13 @@ import cv2
 import os
 
 def get_clothes_mask(old_label) :
-    clothes = torch.FloatTensor((old_label.cpu().numpy() == 3).astype(np.int))
+    clothes = torch.FloatTensor((old_label.cpu().numpy() == 3).astype(np.int64))
     return clothes
 
 def changearm(old_label):
     label=old_label
-    arm1=torch.FloatTensor((old_label.cpu().numpy()==5).astype(np.int))
-    arm2=torch.FloatTensor((old_label.cpu().numpy()==6).astype(np.int))
+    arm1=torch.FloatTensor((old_label.cpu().numpy()==5).astype(np.int64))
+    arm2=torch.FloatTensor((old_label.cpu().numpy()==6).astype(np.int64))
     label=label*(1-arm1)+arm1*3
     label=label*(1-arm2)+arm2*3
     return label
@@ -48,11 +48,28 @@ def ndim_tensor2im(image_tensor, imtype=np.uint8, batch=0):
 
 def visualize_segmap(input, multi_channel=True, tensor_out=True, batch=0) :
     palette = [
-        0, 0, 0, 128, 0, 0, 254, 0, 0, 0, 85, 0, 169, 0, 51,
-        254, 85, 0, 0, 0, 85, 0, 119, 220, 85, 85, 0, 0, 85, 85,
-        85, 51, 0, 52, 86, 128, 0, 128, 0, 0, 0, 254, 51, 169, 220,
-        0, 254, 254, 85, 254, 169, 169, 254, 85, 254, 254, 0, 254, 169, 0
+        0, 0, 0,
+        128, 0, 0,
+        254, 0, 0,
+        0, 85, 0,
+        169, 0, 51,
+        254, 85, 0,
+        0, 0, 85,
+        0, 119, 220,
+        85, 85, 0,
+        0, 85, 85,
+        85, 51, 0,
+        52, 86, 128, #this?
+        0, 128, 0, #초록
+        0, 0, 254,
+        51, 169, 220,
+        0, 254, 254,
+        85, 254, 169,
+        169, 254, 85,
+        254, 254, 0,
+        254, 169, 0
     ]
+
     input = input.detach()
     if multi_channel :
         input = ndim_tensor2im(input,batch=batch)

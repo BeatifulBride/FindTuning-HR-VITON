@@ -1,0 +1,25 @@
+pip>=21.0
+wheel
+numpy
+packaging
+requests
+opt_einsum
+keras_preprocessing
+
+#waring!!!
+##tensorflow 2.9.3 is needed protobuf 3.20
+##tensorboard 2.6.2.2 is needed protobuf 3.19.6
+##Arbitrated version is 3.20 But warning will continue to appear.
+protobuf<3.20,>=3.9.2
+
+tensorflow[and-cuda]==2.9.3
+
+torch
+torchvision
+scipy
+scikit-image
+tqdm
+opencv-python
+torchgeometry
+apex
+IPython
